@@ -30,4 +30,5 @@ public abstract class Asset {
 
     // Abstract method
     public abstract double calculateCurrentValue();
+     
 }

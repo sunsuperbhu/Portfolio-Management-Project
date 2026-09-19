@@ -4,31 +4,25 @@ public class Holding {
 
     private String holdingId;
 
-    private MutualFund asset;
+    private Asset asset;
 
     private int quantity;
 
     // Constructor
-    public Holding(String holdingId,
-                   MutualFund mutualFund,
-                   int quantity) {
+    public Holding(String holdingId, Asset asset, int quantity) {
 
         this.holdingId = holdingId;
-        this.asset = mutualFund;
+        this.asset = asset;
         this.quantity = quantity;
     }
 
     // Getters
 
-    public Holding(String stockHoldingId, Stock stock, int quantity2) {
-		// TODO Auto-generated constructor stub
-	}
-
 	public String getHoldingId() {
         return holdingId;
     }
 
-    public MutualFund getAsset() {
+    public Asset getAsset() {
         return asset;
     }
 
