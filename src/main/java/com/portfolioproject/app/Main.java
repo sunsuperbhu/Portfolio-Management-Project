@@ -5,14 +5,14 @@ import com.portfolioproject.model.Stock;
 import com.portfolioproject.model.MutualFund;
 import com.portfolioproject.model.Holding;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 public class Main {
 
     // Store all users
-    static List<User> users = new ArrayList<>();
+    static Map<String, User> users = new HashMap<>();
 
     public static void main(String[] args) {
 
@@ -40,258 +40,102 @@ public class Main {
             sc.nextLine();
 
             switch (choice) {
-
-                // =========================================
-                // CASE 1: CREATE USER
-                // =========================================
                 case 1:
-
                     System.out.println("\n--- Create User ---");
-
                     System.out.print("Enter User ID: ");
                     String userid = sc.nextLine();
-
                     System.out.print("Enter User Name: ");
                     String name = sc.nextLine();
-
                     System.out.print("Enter Email: ");
                     String email = sc.nextLine();
-
                     User newUser = new User(userid, name, email);
-
-                    // Add user to users list
-                    users.add(newUser);
-
+                    users.put(userid, newUser);
                     System.out.println("User created successfully!");
-
                     break;
 
-
-                // =========================================
-                // CASE 2: ADD STOCK HOLDING
-                // =========================================
                 case 2:
-
-                    if (users.isEmpty()) {
-                        System.out.println("Please create a user first.");
-                        break;
-                    }
-
+                    if (users.isEmpty()) { System.out.println("Please create a user first."); break; }
                     System.out.println("\n--- Add Stock Holding ---");
-
-                    // Ask which user owns this holding
                     System.out.print("Enter User ID: ");
                     String stockUserId = sc.nextLine();
-
                     User stockUser = findUser(stockUserId);
-
-                    if (stockUser == null) {
-                        System.out.println("User not found.");
-                        break;
-                    }
-
+                    if (stockUser == null) { System.out.println("User not found."); break; }
                     System.out.print("Enter Holding ID: ");
                     String stockHoldingId = sc.nextLine();
-
                     System.out.print("Enter Stock ID: ");
                     String stockId = sc.nextLine();
-
                     System.out.print("Enter Stock Name: ");
                     String stockName = sc.nextLine();
-
                     System.out.print("Enter Purchase Price: ");
                     double purchasePrice = sc.nextDouble();
-
                     System.out.print("Enter Current Price: ");
                     double currentPrice = sc.nextDouble();
                     System.out.print("Enter Quantity: ");
                     int quantity = sc.nextInt();
-
                     sc.nextLine();
-
-                    Stock stock = new Stock(
-                            stockId,
-                            stockName,
-                            purchasePrice
-                    );
-
-                    Holding stockHolding = new Holding(
-                            stockHoldingId,
-                            stock,
-                            quantity
-                    );
-
-                    // Add holding to selected user
+                    Stock stock = new Stock(stockId, stockName, purchasePrice, currentPrice);
+                    Holding stockHolding = new Holding(stockHoldingId, stock, quantity);
                     stockUser.addHolding(stockHolding);
-
                     System.out.println("Stock holding added successfully!");
-
                     break;
 
-
-                // =========================================
-                // CASE 3: ADD MUTUAL FUND HOLDING
-                // =========================================
                 case 3:
-
-                    if (users.isEmpty()) {
-                        System.out.println("Please create a user first.");
-                        break;
-                    }
-
+                    if (users.isEmpty()) { System.out.println("Please create a user first."); break; }
                     System.out.println("\n--- Add Mutual Fund Holding ---");
-
-                    // Ask which user owns this holding
                     System.out.print("Enter User ID: ");
                     String mfUserId = sc.nextLine();
-
                     User mfUser = findUser(mfUserId);
-
-                    if (mfUser == null) {
-                        System.out.println("User not found.");
-                        break;
-                    }
-
+                    if (mfUser == null) { System.out.println("User not found."); break; }
                     System.out.print("Enter Holding ID: ");
                     String mfHoldingId = sc.nextLine();
-
                     System.out.print("Enter Mutual Fund ID: ");
                     String mfId = sc.nextLine();
-
                     System.out.print("Enter Mutual Fund Name: ");
                     String mfName = sc.nextLine();
-
                     System.out.print("Enter Purchase Price: ");
                     double mfPurchasePrice = sc.nextDouble();
-
                     System.out.print("Enter NAV: ");
                     double nav = sc.nextDouble();
-
                     System.out.print("Enter Quantity: ");
                     int mfQuantity = sc.nextInt();
-
                     sc.nextLine();
-
-                    MutualFund mutualFund = new MutualFund(
-                            mfId,
-                            mfName,
-                            mfPurchasePrice,
-                            nav
-                    );
-
-                    Holding mfHolding = new Holding(
-                            mfHoldingId,
-                            mutualFund,
-                            mfQuantity
-                    );
-
-                    // Add holding to selected user
+                    MutualFund mutualFund = new MutualFund(mfId, mfName, mfPurchasePrice, nav);
+                    Holding mfHolding = new Holding(mfHoldingId, mutualFund, mfQuantity);
                     mfUser.addHolding(mfHolding);
-
                     System.out.println("Mutual fund holding added successfully!");
-
                     break;
 
-
-                // =========================================
-                // CASE 4: DISPLAY ALL USERS
-                // =========================================
                 case 4:
-
-                    if (users.isEmpty()) {
-
-                        System.out.println("No users created.");
-
-                    } else {
-
+                    if (users.isEmpty()) { System.out.println("No users created."); }
+                    else {
                         System.out.println("\n--- User Details ---");
-
-                        for (User user : users) {
-
-                            user.display();
-
-                            System.out.println("----------------------------");
-                        }
+                        for (User user : users.values()) { user.display(); System.out.println("----------------------------"); }
                     }
-
                     break;
 
-
-                // =========================================
-                // CASE 5: DISPLAY ALL HOLDINGS USER-WISE
-                // =========================================
                 case 5:
-
-                    if (users.isEmpty()) {
-
-                        System.out.println("No users created.");
-
-                        break;
-                    }
-
+                    if (users.isEmpty()) { System.out.println("No users created."); break; }
                     System.out.println("\n--- Holdings ---");
-
-                    for (User user : users) {
-
+                    for (User user : users.values()) {
                         System.out.println("\nUser ID: " + user.getUserid());
                         System.out.println("User Name: " + user.getName());
-
-                        if (user.getHoldings().isEmpty()) {
-
-                            System.out.println("No holdings available.");
-
-                        } else {
-
-                            for (Holding holding : user.getHoldings()) {
-
-                                System.out.println(holding);
-                            }
-                        }
-
+                        if (user.getHoldings().isEmpty()) System.out.println("No holdings available.");
+                        else for (Holding holding : user.getHoldings()) System.out.println(holding);
                         System.out.println("----------------------------");
                     }
-
                     break;
 
-
-                // =========================================
-                // CASE 6: EXIT
-                // =========================================
                 case 6:
-
-                    System.out.println(
-                            "\nThank you for using Stock Portfolio Management System."
-                    );
-
+                    System.out.println("\nThank you for using Stock Portfolio Management System.");
                     break;
-
-
                 default:
-
-                    System.out.println(
-                            "Invalid choice. Please enter 1 to 6."
-                    );
+                    System.out.println("Invalid choice. Please enter 1 to 6.");
             }
-
         } while (choice != 6);
-
         sc.close();
     }
 
-
-    // =========================================
-    // FIND USER BY USER ID
-    // =========================================
     public static User findUser(String userid) {
-
-        for (User user : users) {
-
-            if (user.getUserid().equals(userid)) {
-
-                return user;
-            }
-        }
-
-        return null;
+        return users.get(userid);
     }
 }
