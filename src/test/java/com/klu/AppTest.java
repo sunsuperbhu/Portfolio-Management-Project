@@ -1,38 +1,30 @@
 package com.klu;
 
-import junit.framework.Test;
+import com.portfolioproject.model.Holding;
+import com.portfolioproject.model.Stock;
+import com.portfolioproject.model.User;
 import junit.framework.TestCase;
-import junit.framework.TestSuite;
 
-/**
- * Unit test for simple App.
- */
-public class AppTest 
-    extends TestCase
-{
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
+public class AppTest extends TestCase {
+
+    public void testUserStoresDetailsAndStartsWithoutHoldings() {
+        User user = new User("user-1", "Alex", "alex@example.com");
+
+        assertEquals("user-1", user.getUserid());
+        assertEquals("Alex", user.getName());
+        assertEquals("alex@example.com", user.getEmail());
+        assertTrue(user.getHoldings().isEmpty());
     }
 
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
-    }
+    public void testUserCanAddStockHolding() {
+        User user = new User("user-1", "Alex", "alex@example.com");
+        Stock stock = new Stock("stock-1", "Example Corp", 10.0, 12.5);
+        Holding holding = new Holding("holding-1", stock, 4);
 
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
+        user.addHolding(holding);
+
+        assertEquals(1, user.getHoldings().size());
+        assertSame(holding, user.getHoldings().get(0));
+        assertEquals(50.0, holding.getCurrentValue(), 0.0);
     }
 }
